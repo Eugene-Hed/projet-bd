@@ -1,6 +1,6 @@
 # Système de gestion d'établissement
 
-Ce dépôt contient le projet d'un Système de Gestion d'Établissement (SGE) visant à gérer les ressources humaines et autres ressources de l'établissement (personnel, étudiants, locaux, matériel, etc.).
+Ce dépôt contient le projet d'un Système de Gestion d'Établissement (SGE) visant à gérer les ressources humaines et autres ressources de l'établissement (personnel, étudiants, locaux, matériel, etc.)
 
 Référence du fichier principal : [`README.md`](c:\Users\BEXAO\Desktop\projet-bd\README.md)
 
