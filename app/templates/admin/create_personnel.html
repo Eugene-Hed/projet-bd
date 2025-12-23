@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Ajouter Personnel{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4"><i class="fas fa-plus"></i> Ajouter du Personnel</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form id="personnelForm">
+                        <div class="mb-3">
+                            <label class="form-label">Personne *</label>
+                            <select class="form-control" id="id_personne" name="id_personne" required>
+                                <option value="">-- Sélectionner une personne --</option>
+                                {% for personne in personnes %}
+                                <option value="{{ personne.IdPersonne }}">{{ personne.nom }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Poste *</label>
+                            <select class="form-control" id="id_poste" name="id_poste" required>
+                                <option value="">-- Sélectionner un poste --</option>
+                                {% for poste in postes %}
+                                <option value="{{ poste.IdPoste }}">{{ poste.fonction }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date de Prise de Service *</label>
+                            <input type="date" class="form-control" id="date_prise_service" name="date_prise_service" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Ajouter
+                        </button>
+                        <a href="/admin/personnel" class="btn btn-secondary">Annuler</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('personnelForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const data = {
+        id_personne: document.getElementById('id_personne').value,
+        id_poste: document.getElementById('id_poste').value,
+        date_prise_service: document.getElementById('date_prise_service').value
+    };
+
+    fetch('/admin/personnel/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        window.location.href = '/admin/personnel';
+    })
+    .catch(err => alert('Erreur: ' + err));
+});
+</script>
+{% endblock %}

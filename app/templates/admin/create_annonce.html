@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Créer une Annonce{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4"><i class="fas fa-plus"></i> Créer une Nouvelle Annonce</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form id="annonceForm">
+                        <div class="mb-3">
+                            <label class="form-label">Poste *</label>
+                            <select class="form-control" id="id_poste" name="id_poste" required>
+                                <option value="">-- Sélectionner un poste --</option>
+                                {% for poste in postes %}
+                                <option value="{{ poste.IdPoste }}">{{ poste.fonction }}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Date de Publication *</label>
+                            <input type="date" class="form-control" id="date_publication" name="date_publication" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Délai de Dépôt Candidature *</label>
+                            <input type="date" class="form-control" id="delai_depot" name="delai_depot" required>
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Créer l'Annonce
+                        </button>
+                        <a href="/admin/annonces" class="btn btn-secondary">Annuler</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('annonceForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const data = {
+        id_poste: document.getElementById('id_poste').value,
+        date_publication: document.getElementById('date_publication').value,
+        delai_depot: document.getElementById('delai_depot').value
+    };
+
+    fetch('/admin/annonces/create', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        window.location.href = '/admin/annonces';
+    })
+    .catch(err => alert('Erreur: ' + err));
+});
+</script>
+{% endblock %}

@@ -1,0 +1,79 @@
+{% extends "base.html" %}
+
+{% block title %}Contrats/Candidatures{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4"><i class="fas fa-file-contract"></i> Gestion des Contrats/Candidatures</h1>
+
+    {% if contrats %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Candidat</th>
+                    <th>Annonce</th>
+                    <th>CV</th>
+                    <th>Lettre Motivation</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contrat in contrats %}
+                <tr>
+                    <td><strong>#{{ contrat.IdCandidature }}</strong></td>
+                    <td>{{ contrat.personne.nom }}</td>
+                    <td>#{{ contrat.annonce.IdAnnonce }} - {{ contrat.annonce.poste.fonction }}</td>
+                    <td>
+                        {% if contrat.cv %}
+                        <a href="/uploads/{{ contrat.cv }}" class="btn btn-sm btn-info">
+                            <i class="fas fa-file-pdf"></i> Voir
+                        </a>
+                        {% else %}
+                        <span class="badge bg-secondary">Aucun</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        {% if contrat.lettremotivation %}
+                        <button class="btn btn-sm btn-info" onclick="showLetter({{ contrat.IdCandidature }})">
+                            <i class="fas fa-eye"></i> Voir
+                        </button>
+                        {% else %}
+                        <span class="badge bg-secondary">Aucune</span>
+                        {% endif %}
+                    </td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deleteContrat({{ contrat.IdCandidature }})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Aucune candidature reçue.
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function deleteContrat(id) {
+    if (confirm('Êtes-vous sûr de vouloir supprimer cette candidature ?')) {
+        fetch(`/admin/contrats/${id}/delete`, { method: 'DELETE' })
+            .then(r => r.json())
+            .then(data => {
+                alert(data.message);
+                location.reload();
+            });
+    }
+}
+
+function showLetter(id) {
+    alert('Lettre de motivation ID: ' + id);
+}
+</script>
+{% endblock %}

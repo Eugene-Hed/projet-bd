@@ -1,0 +1,107 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Admin{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">
+        <i class="fas fa-tachometer-alt"></i> Dashboard Administrateur
+    </h1>
+
+    <!-- Stats Cards -->
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="stat-card">
+                <h5>{{ stats.total_postes }}</h5>
+                <p>Postes</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" style="background: linear-gradient(135deg, #27ae60 0%, #52be80 100%);">
+                <h5>{{ stats.total_annonces }}</h5>
+                <p>Annonces</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" style="background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);">
+                <h5>{{ stats.total_candidatures }}</h5>
+                <p>Candidatures</p>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="stat-card" style="background: linear-gradient(135deg, #8e44ad 0%, #af7ac5 100%);">
+                <h5>{{ stats.total_personnels }}</h5>
+                <p>Personnel Embauché</p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation rapide -->
+    <div class="row">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-briefcase fa-3x mb-3" style="color: #3498db;"></i>
+                    <h5 class="card-title">Gestion des Postes</h5>
+                    <p class="card-text">Créer et gérer les postes disponibles</p>
+                    <a href="/admin/postes" class="btn btn-primary btn-sm">Accéder</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-newspaper fa-3x mb-3" style="color: #27ae60;"></i>
+                    <h5 class="card-title">Gestion des Annonces</h5>
+                    <p class="card-text">Publier les offres d'emploi</p>
+                    <a href="/admin/annonces" class="btn btn-primary btn-sm">Accéder</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-file-contract fa-3x mb-3" style="color: #e74c3c;"></i>
+                    <h5 class="card-title">Gestion des Contrats</h5>
+                    <p class="card-text">Gérer les candidatures reçues</p>
+                    <a href="/admin/contrats" class="btn btn-primary btn-sm">Accéder</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-users fa-3x mb-3" style="color: #8e44ad;"></i>
+                    <h5 class="card-title">Gestion du Personnel</h5>
+                    <p class="card-text">Gérer les employés</p>
+                    <a href="/admin/personnel" class="btn btn-primary btn-sm">Accéder</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_css %}
+<style>
+    .stat-card {
+        border-radius: 15px;
+        padding: 30px 20px;
+        color: white;
+        text-align: center;
+        margin-bottom: 20px;
+        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    }
+
+    .stat-card h5 {
+        font-size: 2.5rem;
+        font-weight: 700;
+        margin-bottom: 10px;
+    }
+
+    .stat-card p {
+        font-size: 1rem;
+        margin: 0;
+    }
+</style>
+{% endblock %}

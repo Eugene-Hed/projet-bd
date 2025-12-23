@@ -1,0 +1,109 @@
+{% extends "base.html" %}
+
+{% block title %}Rechercher des Postes{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4"><i class="fas fa-search"></i> Offres d'Emploi Disponibles</h1>
+
+    {% if annonces %}
+    <div class="row">
+        {% for annonce in annonces %}
+        <div class="col-md-6 mb-4">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">
+                        <i class="fas fa-briefcase"></i> {{ annonce.poste.fonction }}
+                    </h5>
+                    <hr>
+                    <p class="card-text">
+                        <strong>Description:</strong><br>
+                        {{ annonce.poste.description_tache or 'Pas de description fournie' }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Niveau d'études requis:</strong> {{ annonce.poste.niveau_etude_requis or 'Non spécifié' }}
+                    </p>
+                    <p class="card-text">
+                        <strong>Délai de candidature:</strong> 
+                        <span class="badge bg-warning">{{ annonce.DelaiDepotCandidature.strftime('%d/%m/%Y') }}</span>
+                    </p>
+                    <button class="btn btn-primary" onclick="applyModal({{ annonce.IdAnnonce }}, '{{ annonce.poste.fonction }}')">
+                        <i class="fas fa-paper-plane"></i> Candidater
+                    </button>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Aucune offre d'emploi disponible pour le moment.
+    </div>
+    {% endif %}
+</div>
+
+<!-- Modal Candidature -->
+<div class="modal fade" id="applyModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalTitle">Candidature</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form id="applyForm">
+                    <div class="mb-3">
+                        <label class="form-label">Lettre de Motivation</label>
+                        <textarea class="form-control" id="lettre_motivation" rows="5" placeholder="Écrivez votre lettre de motivation..."></textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Fichier CV (optionnel)</label>
+                        <input type="file" class="form-control" id="cv" accept=".pdf,.doc,.docx">
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuler</button>
+                <button type="button" class="btn btn-primary" onclick="submitApplication()">
+                    <i class="fas fa-send"></i> Envoyer
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+let currentAnnounceId = null;
+const modal = new bootstrap.Modal(document.getElementById('applyModal'));
+
+function applyModal(annonceId, fonction) {
+    currentAnnounceId = annonceId;
+    document.getElementById('modalTitle').textContent = `Candidature - ${fonction}`;
+    modal.show();
+}
+
+function submitApplication() {
+    const data = {
+        cv: document.getElementById('cv').value,
+        lettre_motivation: document.getElementById('lettre_motivation').value
+    };
+
+    fetch(`/job-seeker/postes/${currentAnnounceId}/apply`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        modal.hide();
+        location.reload();
+    })
+    .catch(err => alert('Erreur: ' + err));
+}
+</script>
+{% endblock %}

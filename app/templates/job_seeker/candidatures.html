@@ -1,0 +1,52 @@
+{% extends "base.html" %}
+
+{% block title %}Mes Candidatures{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4"><i class="fas fa-file-alt"></i> Mes Candidatures</h1>
+
+    {% if contrats %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Poste</th>
+                    <th>Annonce</th>
+                    <th>Date Candidature</th>
+                    <th>Status</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for contrat in contrats %}
+                <tr>
+                    <td><strong>#{{ contrat.IdCandidature }}</strong></td>
+                    <td>{{ contrat.annonce.poste.fonction }}</td>
+                    <td>#{{ contrat.IdAnnonce }}</td>
+                    <td>--</td>
+                    <td><span class="badge bg-info">En attente</span></td>
+                    <td>
+                        <button class="btn btn-sm btn-info" onclick="viewDetails({{ contrat.IdCandidature }})">
+                            <i class="fas fa-eye"></i> Détails
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Vous n'avez pas encore candidaté. <a href="/job-seeker/postes">Découvrir les offres</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function viewDetails(id) {
+    alert('Détails de la candidature #' + id);
+}
+</script>
+{% endblock %}

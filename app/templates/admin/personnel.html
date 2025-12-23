@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+
+{% block title %}Personnel Embauché{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <div class="row mb-4">
+        <div class="col-md-8">
+            <h1><i class="fas fa-users"></i> Gestion du Personnel</h1>
+        </div>
+        <div class="col-md-4 text-end">
+            <a href="/admin/personnel/create" class="btn btn-success">
+                <i class="fas fa-plus"></i> Ajouter Personnel
+            </a>
+        </div>
+    </div>
+
+    {% if personnels %}
+    <div class="table-responsive">
+        <table class="table table-hover">
+            <thead class="table-dark">
+                <tr>
+                    <th>ID</th>
+                    <th>Nom</th>
+                    <th>Poste</th>
+                    <th>Date de Prise de Service</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for personnel in personnels %}
+                <tr>
+                    <td><strong>#{{ personnel.IdPersonnePoste }}</strong></td>
+                    <td>{{ personnel.personne.nom }}</td>
+                    <td>{{ personnel.poste.fonction }}</td>
+                    <td>{{ personnel.DatePriseService.strftime('%d/%m/%Y') }}</td>
+                    <td>
+                        <button class="btn btn-sm btn-danger" onclick="deletePersonnel({{ personnel.IdPersonnePoste }})">
+                            <i class="fas fa-trash"></i> Retirer
+                        </button>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> Aucun personnel embauché. <a href="/admin/personnel/create">Ajouter du personnel</a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function deletePersonnel(id) {
+    if (confirm('Êtes-vous sûr de vouloir retirer ce personnel ?')) {
+        // À implémenter
+        alert('Fonction à implémenter');
+    }
+}
+</script>
+{% endblock %}

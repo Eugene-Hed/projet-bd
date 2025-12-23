@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+
+{% block title %}Modifier un Poste{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4"><i class="fas fa-edit"></i> Modifier le Poste</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form id="posteForm">
+                        <div class="mb-3">
+                            <label class="form-label">Fonction *</label>
+                            <input type="text" class="form-control" id="fonction" name="fonction" value="{{ poste.fonction }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Niveau d'études requis</label>
+                            <select class="form-control" id="niveau_etude_requis" name="niveau_etude_requis">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Baccalauréat" {% if poste.niveau_etude_requis == 'Baccalauréat' %}selected{% endif %}>Baccalauréat</option>
+                                <option value="Licence" {% if poste.niveau_etude_requis == 'Licence' %}selected{% endif %}>Licence</option>
+                                <option value="Master" {% if poste.niveau_etude_requis == 'Master' %}selected{% endif %}>Master</option>
+                                <option value="Doctorat" {% if poste.niveau_etude_requis == 'Doctorat' %}selected{% endif %}>Doctorat</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Description de la tâche</label>
+                            <textarea class="form-control" id="description_tache" name="description_tache" rows="5">{{ poste.description_tache or '' }}</textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="fas fa-save"></i> Mettre à jour
+                        </button>
+                        <a href="/admin/postes" class="btn btn-secondary">Annuler</a>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('posteForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const data = {
+        fonction: document.getElementById('fonction').value,
+        niveau_etude_requis: document.getElementById('niveau_etude_requis').value,
+        description_tache: document.getElementById('description_tache').value
+    };
+
+    fetch('/admin/postes/{{ poste.IdPoste }}/edit', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        window.location.href = '/admin/postes';
+    })
+    .catch(err => alert('Erreur: ' + err));
+});
+</script>
+{% endblock %}

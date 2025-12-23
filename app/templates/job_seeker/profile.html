@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% block title %}Mon Profil{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4"><i class="fas fa-user"></i> Mon Profil</h1>
+
+    <div class="row">
+        <div class="col-md-6">
+            <div class="card">
+                <div class="card-body">
+                    <form id="profileForm">
+                        <div class="mb-3">
+                            <label class="form-label">Nom complet *</label>
+                            <input type="text" class="form-control" id="nom" name="nom" value="{{ personne.nom if personne else '' }}" required>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Âge</label>
+                            <input type="number" class="form-control" id="age" name="age" value="{{ personne.age if personne else '' }}">
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Niveau d'études</label>
+                            <select class="form-control" id="niveau_etude" name="niveau_etude">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Baccalauréat" {% if personne and personne.niveauEtudeMax == 'Baccalauréat' %}selected{% endif %}>Baccalauréat</option>
+                                <option value="Licence" {% if personne and personne.niveauEtudeMax == 'Licence' %}selected{% endif %}>Licence</option>
+                                <option value="Master" {% if personne and personne.niveauEtudeMax == 'Master' %}selected{% endif %}>Master</option>
+                                <option value="Doctorat" {% if personne and personne.niveauEtudeMax == 'Doctorat' %}selected{% endif %}>Doctorat</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Statut matrimonial</label>
+                            <select class="form-control" id="statut_matrimonial" name="statut_matrimonial">
+                                <option value="">-- Sélectionner --</option>
+                                <option value="Célibataire" {% if personne and personne.statu_Matrimonial == 'Célibataire' %}selected{% endif %}>Célibataire</option>
+                                <option value="Marié(e)" {% if personne and personne.statu_Matrimonial == 'Marié(e)' %}selected{% endif %}>Marié(e)</option>
+                                <option value="Divorcé(e)" {% if personne and personne.statu_Matrimonial == 'Divorcé(e)' %}selected{% endif %}>Divorcé(e)</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Numéro de téléphone</label>
+                            <input type="tel" class="form-control" id="numero_telephone" name="numero_telephone" value="{{ personne.numero_telephone if personne else '' }}">
+                        </div>
+                        <button type="submit" class="btn btn-success">
+                            <i class="fas fa-save"></i> Sauvegarder
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+document.getElementById('profileForm').addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const data = {
+        nom: document.getElementById('nom').value,
+        age: document.getElementById('age').value,
+        niveau_etude: document.getElementById('niveau_etude').value,
+        statut_matrimonial: document.getElementById('statut_matrimonial').value,
+        numero_telephone: document.getElementById('numero_telephone').value
+    };
+
+    fetch('/job-seeker/profile', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(err => alert('Erreur: ' + err));
+});
+</script>
+{% endblock %}

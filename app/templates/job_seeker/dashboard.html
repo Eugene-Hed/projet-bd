@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard Demandeur d'Emploi{% endblock %}
+
+{% block content %}
+<div class="container-fluid">
+    <h1 class="mb-4">
+        <i class="fas fa-briefcase"></i> Espace Demandeur d'Emploi
+    </h1>
+
+    <div class="row mb-4">
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-user fa-3x mb-3" style="color: #3498db;"></i>
+                    <h5 class="card-title">Mon Profil</h5>
+                    <p class="card-text">Gérer vos informations personnelles</p>
+                    <a href="/job-seeker/profile" class="btn btn-primary btn-sm">Accéder</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-search fa-3x mb-3" style="color: #27ae60;"></i>
+                    <h5 class="card-title">Rechercher des Postes</h5>
+                    <p class="card-text">Découvrir les offres disponibles</p>
+                    <a href="/job-seeker/postes" class="btn btn-primary btn-sm">Accéder</a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-body text-center">
+                    <i class="fas fa-file-alt fa-3x mb-3" style="color: #e74c3c;"></i>
+                    <h5 class="card-title">Mes Candidatures</h5>
+                    <p class="card-text">Voir l'état de vos candidatures</p>
+                    <a href="/job-seeker/candidatures" class="btn btn-primary btn-sm">Accéder</a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="alert alert-info">
+        <i class="fas fa-info-circle"></i> 
+        <strong>Total annonces disponibles :</strong> {{ annonces|length }}
+    </div>
+</div>
+{% endblock %}
