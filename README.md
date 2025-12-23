@@ -1,4 +1,4 @@
-# Imperial College Management System (Cameroon Adaptation)
+# Elite College Management System (Cameroon Adaptation)
 
 ## Project Overview
 A comprehensive web-based CRUD application for managing educational institutions in Cameroon, specifically designed for O-Level and A-Level programs following the Cameroon GCE system.
