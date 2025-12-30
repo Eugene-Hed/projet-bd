@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestion des Recrutements</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <nav class="sidebar">
+            <div class="logo">
+                <h2>RH Manager</h2>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#" data-section="dashboard" class="nav-link active">📊 Tableau de Bord</a></li>
+                <li><a href="#" data-section="personnel" class="nav-link">👥 Personnel</a></li>
+                <li><a href="#" data-section="poste" class="nav-link">💼 Postes</a></li>
+                <li><a href="#" data-section="annonce" class="nav-link">📢 Annonces</a></li>
+                <li><a href="#" data-section="candidature" class="nav-link">📝 Candidatures</a></li>
+                <li><a href="#" data-section="contrat" class="nav-link">📄 Contrats</a></li>
+            </ul>
+        </nav>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <header class="header">
+                <h1 id="page-title">Tableau de Bord</h1>
+                <div class="header-actions">
+                    <span id="current-time"></span>
+                </div>
+            </header>
+
+            <!-- Dashboard Section -->
+            <section id="dashboard" class="content-section active">
+                <div class="dashboard-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon personnel">👥</div>
+                        <div class="stat-content">
+                            <h3>Personnel</h3>
+                            <p class="stat-number" id="count-personnel">0</p>
+                            <a href="#" class="stat-link" onclick="navigateTo('personnel')">Voir détails →</a>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon poste">💼</div>
+                        <div class="stat-content">
+                            <h3>Postes</h3>
+                            <p class="stat-number" id="count-poste">0</p>
+                            <a href="#" class="stat-link" onclick="navigateTo('poste')">Voir détails →</a>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon annonce">📢</div>
+                        <div class="stat-content">
+                            <h3>Annonces Actives</h3>
+                            <p class="stat-number" id="count-annonce">0</p>
+                            <a href="#" class="stat-link" onclick="navigateTo('annonce')">Voir détails →</a>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon candidature">📝</div>
+                        <div class="stat-content">
+                            <h3>Candidatures</h3>
+                            <p class="stat-number" id="count-candidature">0</p>
+                            <a href="#" class="stat-link" onclick="navigateTo('candidature')">Voir détails →</a>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Personnel Section -->
+            <section id="personnel" class="content-section">
+                <div class="section-header">
+                    <h2>Gestion du Personnel</h2>
+                    <button class="btn btn-primary" onclick="openModal('personnel')">➕ Ajouter Personnel</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="personnel-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nom</th>
+                                <th>Prénom</th>
+                                <th>Email</th>
+                                <th>Téléphone</th>
+                                <th>Ville</th>
+                                <th>Niveau Étude</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Poste Section -->
+            <section id="poste" class="content-section">
+                <div class="section-header">
+                    <h2>Gestion des Postes</h2>
+                    <button class="btn btn-primary" onclick="openModal('poste')">➕ Ajouter Poste</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="poste-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Fonction</th>
+                                <th>Département</th>
+                                <th>Spécialité</th>
+                                <th>Niveau Requis</th>
+                                <th>Postes Disponibles</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Annonce Section -->
+            <section id="annonce" class="content-section">
+                <div class="section-header">
+                    <h2>Gestion des Annonces</h2>
+                    <button class="btn btn-primary" onclick="openModal('annonce')">➕ Ajouter Annonce</button>
+                </div>
+                <div class="table-responsive">
+                    <table id="annonce-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Titre</th>
+                                <th>Poste</th>
+                                <th>Statut</th>
+                                <th>Date Publication</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Candidature Section -->
+            <section id="candidature" class="content-section">
+                <div class="section-header">
+                    <h2>Gestion des Candidatures</h2>
+                </div>
+                <div class="table-responsive">
+                    <table id="candidature-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Candidat</th>
+                                <th>Annonce</th>
+                                <th>Statut</th>
+                                <th>Date Candidature</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+
+            <!-- Contrat Section -->
+            <section id="contrat" class="content-section">
+                <div class="section-header">
+                    <h2>Gestion des Contrats</h2>
+                </div>
+                <div class="table-responsive">
+                    <table id="contrat-table" class="data-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Personnel</th>
+                                <th>Poste</th>
+                                <th>Date Début</th>
+                                <th>Date Fin</th>
+                                <th>Type Contrat</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <!-- Modal for Forms -->
+    <div id="modal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeModal()">&times;</span>
+            <h2 id="modal-title">Formulaire</h2>
+            <form id="entity-form" onsubmit="handleFormSubmit(event)">
+                <div id="form-fields"></div>
+                <div class="form-buttons">
+                    <button type="submit" class="btn btn-primary">Enregistrer</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeModal()">Annuler</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Toast Notification -->
+    <div id="toast" class="toast"></div>
+
+    <script src="{{ url_for('static', filename='js/api.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
