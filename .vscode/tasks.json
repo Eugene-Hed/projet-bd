@@ -1,0 +1,47 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "Execute SQL file in PostgreSQL",
+      "type": "shell",
+      "command": "psql",
+      "args": [
+        "-h",
+        "${input:pgHost}",
+        "-U",
+        "${input:pgUser}",
+        "-d",
+        "${input:pgDatabase}",
+        "-f",
+        "${file}"
+      ],
+      "problemMatcher": [],
+      "presentation": {
+        "echo": true,
+        "reveal": "always",
+        "focus": false,
+        "panel": "new"
+      }
+    }
+  ],
+  "inputs": [
+    {
+      "id": "pgHost",
+      "type": "promptString",
+      "description": "Postgres host (ex: localhost)",
+      "default": "localhost"
+    },
+    {
+      "id": "pgUser",
+      "type": "promptString",
+      "description": "Postgres user",
+      "default": "postgres"
+    },
+    {
+      "id": "pgDatabase",
+      "type": "promptString",
+      "description": "Postgres database",
+      "default": "postgres"
+    }
+  ]
+}
