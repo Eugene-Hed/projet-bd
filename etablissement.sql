@@ -1,16 +1,5 @@
--- ============================================================================
--- BASE DE DONNÉES FUSIONNÉE : Gestion du Recrutement + Événements/Présence
--- SGBD : PostgreSQL 12+
--- Fusion de : établissement.sql + présence_postgresql.sql
--- ============================================================================
-
--- CREATE DATABASE etablissement_presence_db;
-
--- ============================================================================
 -- SECTION 1 : TABLES DE RÉFÉRENCE / STATUTS
--- ============================================================================
 
--- TABLE : ROLE (Rôles utilisateur - fusionné)
 CREATE TABLE ROLE (
     id_role SERIAL PRIMARY KEY,
     nom VARCHAR(50) NOT NULL UNIQUE,
@@ -19,7 +8,6 @@ CREATE TABLE ROLE (
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- TABLE : DIPLOME
 CREATE TABLE DIPLOME (
     id_diplome SERIAL PRIMARY KEY,
     libelle VARCHAR(100) NOT NULL UNIQUE,
@@ -27,7 +15,6 @@ CREATE TABLE DIPLOME (
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- TABLE : POSTE
 CREATE TABLE POSTE (
     id_post SERIAL PRIMARY KEY,
     fonction VARCHAR(100) NOT NULL,
@@ -41,7 +28,6 @@ CREATE TABLE POSTE (
     date_modification TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- TABLE : TYPE_EVENEMENT
 CREATE TABLE TYPE_EVENEMENT (
     id_type SERIAL PRIMARY KEY,
     nom VARCHAR(100) NOT NULL UNIQUE,
@@ -49,7 +35,6 @@ CREATE TABLE TYPE_EVENEMENT (
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- TABLE : STATUT_ANNONCE
 CREATE TABLE STATUT_ANNONCE (
     id_statut SERIAL PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL UNIQUE,
@@ -57,7 +42,6 @@ CREATE TABLE STATUT_ANNONCE (
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- TABLE : STATUT_CANDIDATURE
 CREATE TABLE STATUT_CANDIDATURE (
     id_statut SERIAL PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL UNIQUE,
@@ -65,7 +49,6 @@ CREATE TABLE STATUT_CANDIDATURE (
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- TABLE : STATUT_CONTRAT
 CREATE TABLE STATUT_CONTRAT (
     id_statut SERIAL PRIMARY KEY,
     libelle VARCHAR(50) NOT NULL UNIQUE,
@@ -73,9 +56,7 @@ CREATE TABLE STATUT_CONTRAT (
     date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );
 
--- ============================================================================
--- SECTION 2 : TABLE CENTRALE - PERSONNEL/UTILISATEUR (FUSIONNÉ)
--- ============================================================================
+-- SECTION 2 : TABLE CENTRALE - PERSONNEL/UTILISATEUR
 
 CREATE TABLE PERSONNEL (
     id_personnel SERIAL PRIMARY KEY,
@@ -100,7 +81,6 @@ CREATE INDEX idx_personnel_email ON PERSONNEL(email);
 CREATE INDEX idx_personnel_telephone ON PERSONNEL(numeroTelephone);
 CREATE INDEX idx_personnel_actif ON PERSONNEL(actif);
 
--- TABLE : PERSONNEL_ROLE (Rôles assignés aux personnes)
 CREATE TABLE PERSONNEL_ROLE (
     id_personnel_role SERIAL PRIMARY KEY,
     id_personnel INT NOT NULL,
@@ -117,7 +97,6 @@ CREATE TABLE PERSONNEL_ROLE (
 CREATE INDEX idx_personnel_role_personnel ON PERSONNEL_ROLE(id_personnel);
 CREATE INDEX idx_personnel_role_role ON PERSONNEL_ROLE(id_role);
 
--- TABLE : PERSONNEL_DIPLOME
 CREATE TABLE PERSONNEL_DIPLOME (
     id_personnel_diplome SERIAL PRIMARY KEY,
     id_personnel INT NOT NULL,
@@ -134,11 +113,8 @@ CREATE TABLE PERSONNEL_DIPLOME (
 CREATE INDEX idx_personnel_diplome_personnel ON PERSONNEL_DIPLOME(id_personnel);
 CREATE INDEX idx_personnel_diplome_diplome ON PERSONNEL_DIPLOME(id_diplome);
 
--- ============================================================================
 -- SECTION 3 : GESTION DES POSTES ET AFFECTATIONS
--- ============================================================================
 
--- TABLE : PERSONNE_POSTE
 CREATE TABLE PERSONNE_POSTE (
     id_personneposte SERIAL PRIMARY KEY,
     id_personnel INT NOT NULL,
@@ -156,11 +132,8 @@ CREATE TABLE PERSONNE_POSTE (
 CREATE INDEX idx_personne_poste_personnel ON PERSONNE_POSTE(id_personnel);
 CREATE INDEX idx_personne_poste_poste ON PERSONNE_POSTE(id_post);
 
--- ============================================================================
 -- SECTION 4 : GESTION DU RECRUTEMENT
--- ============================================================================
 
--- TABLE : ANNONCE
 CREATE TABLE ANNONCE (
     id_annonce SERIAL PRIMARY KEY,
     datePublication DATE NOT NULL,
@@ -181,7 +154,6 @@ CREATE INDEX idx_annonce_poste ON ANNONCE(id_post);
 CREATE INDEX idx_annonce_statut ON ANNONCE(id_statut);
 CREATE INDEX idx_annonce_date ON ANNONCE(datePublication);
 
--- TABLE : CANDIDATURE
 CREATE TABLE CANDIDATURE (
     id_candidature SERIAL PRIMARY KEY,
     cv BYTEA,
@@ -207,7 +179,6 @@ CREATE INDEX idx_candidature_annonce ON CANDIDATURE(id_annonce);
 CREATE INDEX idx_candidature_personnel ON CANDIDATURE(id_personnel);
 CREATE INDEX idx_candidature_statut ON CANDIDATURE(id_statut);
 
--- TABLE : CONTRAT
 CREATE TABLE CONTRAT (
     id_contrat SERIAL PRIMARY KEY,
     typeContrat VARCHAR(50) NOT NULL,
@@ -231,11 +202,8 @@ CREATE INDEX idx_contrat_personnel ON CONTRAT(id_personnel);
 CREATE INDEX idx_contrat_statut ON CONTRAT(id_statut);
 CREATE INDEX idx_contrat_date ON CONTRAT(dateDebut);
 
--- ============================================================================
 -- SECTION 5 : GESTION DES ÉVÉNEMENTS ET PRÉSENCE
--- ============================================================================
 
--- TABLE : EVENEMENT
 CREATE TABLE EVENEMENT (
     id_evenement SERIAL PRIMARY KEY,
     titre VARCHAR(100) NOT NULL,
@@ -276,7 +244,6 @@ BEFORE UPDATE ON EVENEMENT
 FOR EACH ROW
 EXECUTE FUNCTION update_evenement_timestamp();
 
--- TABLE : INSCRIPTION (Inscription aux événements)
 CREATE TABLE INSCRIPTION (
     id_inscription SERIAL PRIMARY KEY,
     id_personnel INT NOT NULL,
@@ -295,7 +262,6 @@ CREATE INDEX idx_inscription_personnel ON INSCRIPTION(id_personnel);
 CREATE INDEX idx_inscription_evenement ON INSCRIPTION(id_evenement);
 CREATE INDEX idx_inscription_date ON INSCRIPTION(date_inscription);
 
--- TABLE : PRESENCE (Enregistrement de présence)
 CREATE TABLE PRESENCE (
     id_presence SERIAL PRIMARY KEY,
     id_personnel INT NOT NULL,
@@ -314,7 +280,6 @@ CREATE INDEX idx_presence_personnel ON PRESENCE(id_personnel);
 CREATE INDEX idx_presence_evenement ON PRESENCE(id_evenement);
 CREATE INDEX idx_presence_date ON PRESENCE(date_scan);
 
--- TABLE : QR_CODE (QR Codes pour scannage)
 CREATE TABLE QR_CODE (
     id_qr SERIAL PRIMARY KEY,
     id_evenement INT NOT NULL,
@@ -329,11 +294,8 @@ CREATE TABLE QR_CODE (
 CREATE INDEX idx_qr_code_evenement ON QR_CODE(id_evenement);
 CREATE INDEX idx_qr_code_activation ON QR_CODE(code_activation);
 
--- ============================================================================
 -- SECTION 6 : DONNÉES DE DÉMONSTRATION
--- ============================================================================
 
--- Insérer les rôles
 INSERT INTO ROLE (nom, description, type_role) VALUES
     ('Admin', 'Administrateur système', 'general'),
     ('RH', 'Gestionnaire RH', 'recrutement'),
@@ -342,7 +304,6 @@ INSERT INTO ROLE (nom, description, type_role) VALUES
     ('Participant', 'Participant', 'evenement'),
     ('Visiteur', 'Visiteur', 'evenement');
 
--- Insérer les diplômes
 INSERT INTO DIPLOME (libelle, description) VALUES
     ('Bac+2', 'Diplôme de niveau Bac+2'),
     ('Licence', 'Diplôme de niveau Licence (Bac+3)'),
@@ -350,7 +311,6 @@ INSERT INTO DIPLOME (libelle, description) VALUES
     ('Doctorat', 'Diplôme de niveau Doctorat (Bac+8)'),
     ('Certification', 'Certification professionnelle');
 
--- Insérer les postes
 INSERT INTO POSTE (fonction, departement, specialite, niveauRequis, description) VALUES
     ('Développeur Python', 'Informatique', 'Backend', 'Bac+2', 'Développeur Backend Python'),
     ('Développeur JavaScript', 'Informatique', 'Frontend', 'Bac+2', 'Développeur Frontend JavaScript'),
@@ -358,7 +318,6 @@ INSERT INTO POSTE (fonction, departement, specialite, niveauRequis, description)
     ('Data Scientist', 'Data', 'Data Science', 'Master', 'Spécialiste en Data Science'),
     ('Responsable RH', 'RH', 'Ressources Humaines', 'Bac+3', 'Gestionnaire des Ressources Humaines');
 
--- Insérer les types d'événement
 INSERT INTO TYPE_EVENEMENT (nom, description) VALUES
     ('Conférence', 'Conférence ou séminaire'),
     ('Atelier', 'Atelier de formation'),
@@ -366,7 +325,6 @@ INSERT INTO TYPE_EVENEMENT (nom, description) VALUES
     ('Formation obligatoire', 'Formation obligatoire pour les salariés'),
     ('Événement social', 'Événement social ou networking');
 
--- Insérer les statuts
 INSERT INTO STATUT_ANNONCE (libelle, description) VALUES
     ('Actif', 'Annonce active et en recherche'),
     ('Clôturée', 'Annonce clôturée'),
@@ -393,21 +351,20 @@ INSERT INTO PERSONNEL (nom, prenom, email, numeroTelephone, telephone, adresse, 
 
 -- Assigner les rôles au personnel
 INSERT INTO PERSONNEL_ROLE (id_personnel, id_role) VALUES
-    (1, 1), -- Dupont = Admin
-    (2, 2), -- Martin = RH
-    (3, 4), -- Bernard = Manager
-    (4, 3), -- Durand = Superviseur
-    (5, 5); -- Moreau = Participant
+    (1, 1),
+    (2, 2),
+    (3, 4),
+    (4, 3),
+    (5, 5);
 
 -- Assigner des postes au personnel
 INSERT INTO PERSONNE_POSTE (id_personnel, id_post, datePriseService, statut) VALUES
-    (1, 1, '2023-01-15', 'actif'), -- Dupont → Développeur Python
-    (2, 1, '2023-02-20', 'actif'), -- Martin → Développeur Python
-    (3, 2, '2023-03-10', 'actif'), -- Bernard → Développeur JavaScript
-    (4, 3, '2023-04-05', 'actif'), -- Durand → Chef de Projet
-    (5, 5, '2023-05-12', 'actif'); -- Moreau → Responsable RH
+    (1, 1, '2023-01-15', 'actif'),
+    (2, 1, '2023-02-20', 'actif'),
+    (3, 2, '2023-03-10', 'actif'),
+    (4, 3, '2023-04-05', 'actif'),
+    (5, 5, '2023-05-12', 'actif');
 
--- Insérer des contrats
 INSERT INTO CONTRAT (typeContrat, montantSalaire, typeRemuneration, dateDebut, id_personnel, id_statut) VALUES
     ('CDI', 2500.00, 'Mensuel', '2023-01-15', 1, 1),
     ('CDI', 2300.00, 'Mensuel', '2023-02-20', 2, 1),
@@ -415,40 +372,33 @@ INSERT INTO CONTRAT (typeContrat, montantSalaire, typeRemuneration, dateDebut, i
     ('CDI', 2600.00, 'Mensuel', '2023-04-05', 4, 1),
     ('CDI', 2100.00, 'Mensuel', '2023-05-12', 5, 1);
 
--- Insérer des annonces
 INSERT INTO ANNONCE (datePublication, dateCloturePostulation, nombrePostes, id_post, id_statut) VALUES
-    ('2025-12-15', '2026-01-22', 2, 1, 1), -- Développeur Python
-    ('2025-12-16', '2026-01-23', 1, 2, 1), -- Développeur JavaScript
-    ('2025-12-17', '2026-01-24', 1, 3, 1); -- Chef de Projet
+    ('2025-12-15', '2026-01-22', 2, 1, 1),
+    ('2025-12-16', '2026-01-23', 1, 2, 1),
+    ('2025-12-17', '2026-01-24', 1, 3, 1);
 
--- Insérer des événements
 INSERT INTO EVENEMENT (titre, description, heure_debut, heure_fin, date_evenement, id_type, id_post, lieu, capacite) VALUES
     ('Conférence Python 2026', 'Conférence sur les meilleures pratiques Python', '09:00:00', '11:00:00', '2026-01-20', 1, 1, 'Salle A', 50),
     ('Atelier Web Development', 'Formation Frontend avec React', '14:00:00', '17:00:00', '2026-01-21', 2, 2, 'Salle B', 30),
     ('Réunion Q1 2025', 'Planification du Q1', '10:00:00', '12:00:00', '2026-01-22', 3, NULL, 'Salle Réunion', 20),
     ('Formation Obligatoire Sécurité', 'Formation obligatoire sécurité', '09:00:00', '10:30:00', '2026-01-23', 4, NULL, 'Amphithéâtre', 100);
 
--- Insérer des inscriptions aux événements
 INSERT INTO INSCRIPTION (id_personnel, id_evenement, statut) VALUES
-    (1, 1, 'inscrit'), -- Dupont → Conférence Python
-    (2, 1, 'inscrit'), -- Martin → Conférence Python
-    (3, 2, 'inscrit'), -- Bernard → Atelier Web
-    (4, 3, 'inscrit'), -- Durand → Réunion Q1
-    (5, 4, 'inscrit'); -- Moreau → Formation Sécurité
+    (1, 1, 'inscrit'),
+    (2, 1, 'inscrit'),
+    (3, 2, 'inscrit'),
+    (4, 3, 'inscrit'),
+    (5, 4, 'inscrit');
 
--- Insérer des présences
 INSERT INTO PRESENCE (id_personnel, id_evenement, date_scan, heure_arrivee) VALUES
-    (1, 1, CURRENT_TIMESTAMP, '08:55:00'), -- Dupont présent Conférence
-    (2, 1, CURRENT_TIMESTAMP, '09:00:00'), -- Martin présent Conférence
-    (3, 2, CURRENT_TIMESTAMP, '14:05:00'), -- Bernard présent Atelier
-    (4, 3, CURRENT_TIMESTAMP, '10:00:00'), -- Durand présent Réunion
-    (5, 4, CURRENT_TIMESTAMP, '09:02:00'); -- Moreau présent Formation
+    (1, 1, CURRENT_TIMESTAMP, '08:55:00'),
+    (2, 1, CURRENT_TIMESTAMP, '09:00:00'),
+    (3, 2, CURRENT_TIMESTAMP, '14:05:00'),
+    (4, 3, CURRENT_TIMESTAMP, '10:00:00'),
+    (5, 4, CURRENT_TIMESTAMP, '09:02:00');
 
--- ============================================================================
--- SECTION 7 : VUES UTILES (OPTIONNEL)
--- ============================================================================
+-- SECTION 7 : VUES UTILES
 
--- Vue : Récapitulatif du personnel
 CREATE VIEW v_personnel_detail AS
 SELECT 
     p.id_personnel,
@@ -468,7 +418,6 @@ LEFT JOIN ROLE r ON pr.id_role = r.id_role
 LEFT JOIN CONTRAT c ON p.id_personnel = c.id_personnel AND c.id_statut = 1
 GROUP BY p.id_personnel, p.nom, p.prenom, p.email, p.numeroTelephone, po.fonction, c.typeContrat, c.montantSalaire, c.dateDebut;
 
--- Vue : Événements avec statistiques de présence
 CREATE VIEW v_evenement_presences AS
 SELECT 
     e.id_evenement,
@@ -486,6 +435,3 @@ LEFT JOIN INSCRIPTION i ON e.id_evenement = i.id_evenement
 LEFT JOIN PRESENCE pr ON e.id_evenement = pr.id_evenement
 GROUP BY e.id_evenement, e.titre, e.date_evenement, e.heure_debut, e.heure_fin, te.nom;
 
--- ============================================================================
--- FIN DU SCHÉMA FUSIONNÉ
--- ============================================================================
