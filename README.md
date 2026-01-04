@@ -58,12 +58,12 @@ cd <nom_du_dossier>
 
 2. Créer et activer un environnement virtuel :
 
-# Windows
+## Windows
 
 python -m venv venv
 .\venv\Scripts\activate
 
-# Linux / Mac
+## Linux / Mac
 
 python -m venv venv
 source venv/bin/activate
