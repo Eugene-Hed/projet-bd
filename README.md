@@ -1,3 +1,25 @@
+# SGE Flask CRUD Tester
+
+Simple Flask app to test CRUD operations for tables defined in `sql/sge.sql`.
+
+Setup
+
+1. Create the PostgreSQL database `sge` and run `sql/sge.sql` to create schema and seed data.
+2. (Optional) set environment variables `SGE_DB_USER`, `SGE_DB_PASS`, `SGE_DB_HOST`, `SGE_DB_NAME`.
+3. Install dependencies:
+
+```
+pip install -r requirements.txt
+```
+
+Run
+
+```
+python app.py
+```
+
+Open http://localhost:5000 and test CRUD for each table.
+
 # Système de gestion d'établissement
 
 Ce dépôt contient le projet d'un Système de Gestion d'Établissement (SGE) visant à gérer les ressources humaines et autres ressources de l'établissement (personnel, étudiants, locaux, matériel, etc.)

@@ -2,58 +2,132 @@
 <html lang="fr">
   <head>
     <meta charset="UTF-8" />
-    <title>SGE – Système de Gestion d'Établissement</title>
+    <title>SGE – Test CRUD</title>
     <link rel="stylesheet" href="style.css" />
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 30px;
+        background: #f5f5f5;
+      }
+      header {
+        background: #2c3e50;
+        color: white;
+        padding: 20px;
+        border-radius: 6px;
+      }
+      section {
+        background: white;
+        padding: 20px;
+        margin-top: 20px;
+        border-radius: 6px;
+      }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 15px;
+      }
+      th,
+      td {
+        border: 1px solid #ccc;
+        padding: 8px;
+        text-align: left;
+      }
+      th {
+        background: #eee;
+      }
+      input,
+      select,
+      button {
+        padding: 6px;
+        margin: 5px 0;
+        width: 100%;
+      }
+      button {
+        background: #3498db;
+        color: white;
+        border: none;
+        cursor: pointer;
+      }
+      button.delete {
+        background: #e74c3c;
+      }
+    </style>
   </head>
+
   <body>
     <header>
-      <h1>Système de Gestion d'Établissement (SGE)</h1>
-      <p>Projet de base de données – PostgreSQL</p>
+      <h1>SGE – Système de Gestion d'Établissement</h1>
+      <p>Page de test CRUD – Flask + PostgreSQL</p>
     </header>
 
+    <!-- ===================== -->
+    <!-- FORMULAIRE AJOUT -->
+    <!-- ===================== -->
     <section>
-      <h2>📌 Présentation</h2>
-      <p>
-        Le Système de Gestion d'Établissement (SGE) est un projet académique
-        visant à concevoir une base de données permettant de gérer les
-        ressources humaines, matérielles et administratives d’un établissement
-        scolaire.
-      </p>
+      <h2>➕ Ajouter un membre du personnel</h2>
+
+      <!-- Cette route sera créée dans Flask -->
+      <form action="/personnel/add" method="post">
+        <label>Nom</label>
+        <input type="text" name="nom" required />
+
+        <label>Prénom</label>
+        <input type="text" name="prenom" required />
+
+        <label>Email</label>
+        <input type="email" name="email" />
+
+        <label>Téléphone</label>
+        <input type="text" name="telephone" />
+
+        <label>Ville</label>
+        <input type="text" name="ville" />
+
+        <button type="submit">Enregistrer</button>
+      </form>
     </section>
 
+    <!-- ===================== -->
+    <!-- LISTE DU PERSONNEL -->
+    <!-- ===================== -->
     <section>
-      <h2>🎯 Objectifs</h2>
-      <ul>
-        <li>Gestion des employés et des contrats</li>
-        <li>Organisation des départements et des postes</li>
-        <li>Gestion des étudiants</li>
-        <li>Gestion des salles et équipements</li>
-      </ul>
-    </section>
+      <h2>📋 Liste du personnel</h2>
 
-    <section>
-      <h2>🗂️ Structure de la base de données</h2>
-      <ul>
-        <li><strong>departement</strong> : services de l’établissement</li>
-        <li><strong>poste</strong> : fonctions du personnel</li>
-        <li>
-          <strong>employe</strong> : personnel administratif et enseignant
-        </li>
-        <li><strong>contrat</strong> : contrats des employés</li>
-        <li><strong>etudiant</strong> : étudiants inscrits</li>
-        <li><strong>salle</strong> : salles de cours</li>
-        <li><strong>equipement</strong> : matériel des salles</li>
-      </ul>
-    </section>
-
-    <section>
-      <h2>⚙️ Technologies</h2>
-      <ul>
-        <li>PostgreSQL</li>
-        <li>SQL</li>
-        <li>Visual Studio Code</li>
-        <li>GitHub</li>
-      </ul>
+      <!-- Les données viendront de Flask -->
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Nom complet</th>
+            <th>Email</th>
+            <th>Téléphone</th>
+            <th>Ville</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Exemple de boucle Jinja -->
+          {% for p in personnels %}
+          <tr>
+            <td>{{ p.id_personnel }}</td>
+            <td>{{ p.nom }} {{ p.prenom }}</td>
+            <td>{{ p.email }}</td>
+            <td>{{ p.numeroTelephone }}</td>
+            <td>{{ p.ville }}</td>
+            <td>
+              <a href="/personnel/edit/{{ p.id_personnel }}">✏️</a>
+              |
+              <a
+                href="/personnel/delete/{{ p.id_personnel }}"
+                onclick="return confirm('Supprimer ?')"
+                >🗑️</a
+              >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
     </section>
 
     <footer>

@@ -1,0 +1,38 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Table: {{ table }}</h2>
+<p><a class="button" href="/{{ table }}/create">Create new</a></p>
+<table>
+  <thead>
+    <tr>
+      {% for col in columns %}
+      <th>{{ col }}</th>
+      {% endfor %}
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for item in items %}
+    <tr>
+      {% for col in columns %}
+      <td>{{ getattr(item, col) }}</td>
+      {% endfor %}
+      <td>
+        <a href="/{{ table }}/edit/{{ item.id }}">Edit</a>
+        <form
+          action="/{{ table }}/delete/{{ item.id }}"
+          method="post"
+          style="display: inline"
+          onsubmit="return confirm('Delete?')"
+        >
+          <button type="submit">Delete</button>
+        </form>
+      </td>
+    </tr>
+    {% else %}
+    <tr>
+      <td colspan="{{ columns|length + 1 }}">No rows</td>
+    </tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}
