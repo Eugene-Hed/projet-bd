@@ -67,6 +67,8 @@ python -m venv venv
 
 python -m venv venv
 source venv/bin/activate
+---
+
 
 3. Installer les dépendances :
 
