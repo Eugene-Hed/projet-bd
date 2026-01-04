@@ -1,0 +1,8 @@
+{% extends 'base.html' %} {% block content %}
+<h2>Available tables</h2>
+<ul>
+  {% for t in tables %}
+  <li><a href="/{{ t }}/">{{ t }}</a></li>
+  {% endfor %}
+</ul>
+{% endblock %}

@@ -1,0 +1,36 @@
+{% extends 'base.html' %} {% block content %}
+<h2>{{ 'Edit' if item else 'Create' }} - {{ table }}</h2>
+<form method="post">
+  <table>
+    <tbody>
+      {% for col in columns %}
+      <tr>
+        <td><label for="{{ col.name }}">{{ col.name }}</label></td>
+        <td>
+          {% set val = (getattr(item, col.name) if item else '') %} {% if 'date'
+          in col.type.__class__.__name__.lower() %}
+          <input
+            type="date"
+            name="{{ col.name }}"
+            id="{{ col.name }}"
+            value="{{ val }}"
+          />
+          {% else %}
+          <input
+            type="text"
+            name="{{ col.name }}"
+            id="{{ col.name }}"
+            value="{{ val }}"
+          />
+          {% endif %}
+        </td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+  <p>
+    <button type="submit">Save</button>
+    <a href="/{{ table }}/">Cancel</a>
+  </p>
+</form>
+{% endblock %}
