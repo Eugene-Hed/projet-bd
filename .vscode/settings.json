@@ -1,0 +1,10 @@
+{
+  "emeraldwalk.runonsave": {
+    "commands": [
+      {
+        "match": "\\.sql$",
+        "cmd": "psql -h ${env:PGHOST:-localhost} -U ${env:PGUSER:-postgres} -d ${env:PGDATABASE:-postgres} -f \"${file}\""
+      }
+    ]
+  }
+}
