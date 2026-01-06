@@ -25,6 +25,18 @@
                     <td><strong>#{{ contrat.IdCandidature }}</strong></td>
                     <td>{{ contrat.personne.nom }}</td>
                     <td>#{{ contrat.annonce.IdAnnonce }} - {{ contrat.annonce.poste.fonction }}</td>
+                    <td>{{ contrat.date_candidature.strftime('%d/%m/%Y %H:%M') if contrat.date_candidature else '--' }}</td>
+                    <td>
+                        {% if contrat.status == 'En attente' %}
+                        <span class="badge bg-info">En attente</span>
+                        {% elif contrat.status == 'Accepté' %}
+                        <span class="badge bg-success">Accepté</span>
+                        {% elif contrat.status == 'Refusé' %}
+                        <span class="badge bg-danger">Refusé</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ contrat.status }}</span>
+                        {% endif %}
+                    </td>
                     <td>
                         {% if contrat.cv %}
                         <a href="/uploads/{{ contrat.cv }}" class="btn btn-sm btn-info">
@@ -44,6 +56,12 @@
                         {% endif %}
                     </td>
                     <td>
+                        <button class="btn btn-sm btn-success" onclick="decideContrat({{ contrat.IdCandidature }}, 'Accepté')">
+                            <i class="fas fa-check"></i>
+                        </button>
+                        <button class="btn btn-sm btn-warning" onclick="decideContrat({{ contrat.IdCandidature }}, 'Refusé')">
+                            <i class="fas fa-times"></i>
+                        </button>
                         <button class="btn btn-sm btn-danger" onclick="deleteContrat({{ contrat.IdCandidature }})">
                             <i class="fas fa-trash"></i>
                         </button>
@@ -74,6 +92,20 @@ function deleteContrat(id) {
 
 function showLetter(id) {
     alert('Lettre de motivation ID: ' + id);
+}
+
+function decideContrat(id, status) {
+    if (!confirm('Confirmer la décision: ' + status + ' ?')) return;
+    fetch(`/admin/contrats/${id}/decision`, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({status: status})
+    })
+    .then(r => r.json())
+    .then(data => {
+        alert(data.message);
+        location.reload();
+    });
 }
 </script>
 {% endblock %}

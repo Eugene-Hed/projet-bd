@@ -27,7 +27,7 @@
                         <strong>Délai de candidature:</strong> 
                         <span class="badge bg-warning">{{ annonce.DelaiDepotCandidature.strftime('%d/%m/%Y') }}</span>
                     </p>
-                    <button class="btn btn-primary" onclick="applyModal({{ annonce.IdAnnonce }}, '{{ annonce.poste.fonction }}')">
+                    <button class="btn btn-primary" onclick='applyModal({{ annonce.IdAnnonce }}, {{ annonce.poste.fonction|tojson }})'>
                         <i class="fas fa-paper-plane"></i> Candidater
                     </button>
                 </div>

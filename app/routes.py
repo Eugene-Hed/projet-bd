@@ -221,9 +221,24 @@ def apply_job(id):
     contrat = Contrat(
         cv=data.get('cv'),
         lettremotivation=data.get('lettre_motivation'),
+        status='En attente',
         IdAnnonce=id,
         IdPersonne=personne.IdPersonne
     )
     db.session.add(contrat)
     db.session.commit()
     return jsonify({'success': True, 'message': 'Candidature envoyée'}), 201
+
+
+# Route pour que l'employeur/admin prenne une décision sur une candidature
+@admin_bp.route('/contrats/<int:id>/decision', methods=['POST'])
+def decision_contrat(id):
+    data = request.json
+    statut = data.get('status')
+    if statut not in ['Accepté', 'Refusé', 'En attente']:
+        return jsonify({'success': False, 'message': 'Statut invalide'}), 400
+
+    contrat = Contrat.query.get_or_404(id)
+    contrat.status = statut
+    db.session.commit()
+    return jsonify({'success': True, 'message': f'Candidature mise à "{statut}"'}), 200

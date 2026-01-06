@@ -1,4 +1,5 @@
 from app import db
+from datetime import datetime
 
 class Personne(db.Model):
     __tablename__ = 'personne'
@@ -44,6 +45,8 @@ class Contrat(db.Model):
     IdCandidature = db.Column(db.Integer, primary_key=True)
     cv = db.Column(db.String(255))
     lettremotivation = db.Column(db.Text)
+    status = db.Column(db.String(50), default='En attente')
+    date_candidature = db.Column(db.DateTime, default=datetime.utcnow)
     IdAnnonce = db.Column(db.Integer, db.ForeignKey('annonce.IdAnnonce'), nullable=False)
     IdPersonne = db.Column(db.Integer, db.ForeignKey('personne.IdPersonne'), nullable=False)
 

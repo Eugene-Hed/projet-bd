@@ -25,8 +25,18 @@
                     <td><strong>#{{ contrat.IdCandidature }}</strong></td>
                     <td>{{ contrat.annonce.poste.fonction }}</td>
                     <td>#{{ contrat.IdAnnonce }}</td>
-                    <td>--</td>
-                    <td><span class="badge bg-info">En attente</span></td>
+                    <td>{{ contrat.date_candidature.strftime('%d/%m/%Y %H:%M') if contrat.date_candidature else '--' }}</td>
+                    <td>
+                        {% if contrat.status == 'En attente' %}
+                        <span class="badge bg-info">En attente</span>
+                        {% elif contrat.status == 'Accepté' %}
+                        <span class="badge bg-success">Accepté</span>
+                        {% elif contrat.status == 'Refusé' %}
+                        <span class="badge bg-danger">Refusé</span>
+                        {% else %}
+                        <span class="badge bg-secondary">{{ contrat.status }}</span>
+                        {% endif %}
+                    </td>
                     <td>
                         <button class="btn btn-sm btn-info" onclick="viewDetails({{ contrat.IdCandidature }})">
                             <i class="fas fa-eye"></i> Détails
